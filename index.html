@@ -1,618 +1,621 @@
-Připravím kompletní samostatný HTML soubor — vše v jednom (Tailwind CDN, Google Fonts, Lucide ikony, všechny sekce). Stačí uložit jako `index.html` a otevřít v prohlížeči.
-Action: file_editor create /app/frontend/public/standalone.html --file-text "<!doctype html>
-<html lang=\"en\">
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset=\"utf-8\" />
-<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
-<title>JS Valeting — Liverpool & Manchester</title>
-<meta name=\"description\" content=\"Premium mobile car valeting across Liverpool, Manchester and the North West.\" />
-
-<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />
-<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />
-<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap\" rel=\"stylesheet\" />
-
-<script src=\"https://cdn.tailwindcss.com\"></script>
-<script src=\"https://unpkg.com/lucide@latest\"></script>
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JS Valeting — Liverpool &amp; Manchester</title>
+<meta name="description" content="Premium mobile car valeting across Liverpool, Manchester and the North West. We come to you." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet" />
 <style>
-  :root { color-scheme: dark; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: #0b0b0d;
-    color: #f1ece2;
-    font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  ::selection { background: #c9a467; color: #0b0b0d; }
-  .font-serif { font-family: 'Playfair Display', serif; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0c;--bg2:#0e0e11;--bg3:#131316;
+  --gold:#c9a467;--gold-lt:#e0bd80;--gold-dk:#a07e3f;
+  --cream:#f1ece2;--cream2:#d8d2c4;--muted:#a09a8f;--dim:#7a7468;
+  --card-b:rgba(255,255,255,0.09);--gold-b:rgba(201,164,103,0.3);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--cream);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--gold);color:var(--bg)}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#2a2a2e;border-radius:4px}
+.serif{font-family:'Playfair Display',Georgia,serif}
+.gold-text{background:linear-gradient(135deg,#e8c987 0%,#c9a467 55%,#a07e3f 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
-  .text-gold {
-    background: linear-gradient(135deg, #e8c987 0%, #c9a467 50%, #a07e3f 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .4s,backdrop-filter .4s,border-color .4s;border-bottom:1px solid transparent}
+#nav.scrolled{background:rgba(10,10,12,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:rgba(255,255,255,.05)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 32px;height:72px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-badge{width:38px;height:38px;border-radius:50%;border:1px solid rgba(201,164,103,.5);display:flex;align-items:center;justify-content:center;transition:border-color .2s}
+.logo:hover .logo-badge{border-color:var(--gold)}
+.logo-badge span{font-family:'Playfair Display',serif;font-style:italic;color:var(--gold);font-size:14px}
+.logo-name{font-family:'Playfair Display',serif;font-size:18px;letter-spacing:.02em;color:var(--cream)}
+.logo-sub{font-size:9px;text-transform:uppercase;letter-spacing:.22em;color:var(--muted)}
+.nav-links{display:flex;align-items:center;gap:36px}
+.nav-links a{font-size:13px;letter-spacing:.04em;color:var(--cream2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{background:var(--gold)!important;color:var(--bg)!important;padding:10px 22px;border-radius:100px;font-weight:600!important;transition:background .2s,transform .2s!important}
+.nav-cta:hover{background:var(--gold-lt)!important;transform:translateY(-1px)}
+.hamburger{display:none;background:none;border:none;cursor:pointer;width:40px;height:40px;align-items:center;justify-content:flex-end;flex-direction:column;gap:5px;padding:0}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--cream);transition:all .3s ease}
+.hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4.5px,4.5px)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4.5px,-4.5px)}
+.mobile-menu{display:none;flex-direction:column;gap:0;background:rgba(10,10,12,.97);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.05);padding:24px 32px 32px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:16px;color:var(--cream2);text-decoration:none;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);transition:color .2s}
+.mobile-menu a:hover{color:var(--gold)}
+.mob-cta{margin-top:20px!important;background:var(--gold);color:var(--bg)!important;border-radius:100px;padding:13px 24px!important;font-weight:600;text-align:center;border:none}
 
-  .btn-gold {
-    background: #c9a467; color: #0b0b0d;
-    transition: background .3s ease, transform .3s ease;
-  }
-  .btn-gold:hover { background: #e0bd80; transform: translateY(-1px); }
+/* HERO */
+.hero{position:relative;min-height:100svh;overflow:hidden;display:flex;flex-direction:column}
+.hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1617531653332-bd46c16f4d68?q=90&w=2400&auto=format&fit=crop');background-size:cover;background-position:center 30%;animation:kb 22s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1.04)}to{transform:scale(1.12)}}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,10,12,.75) 0%,rgba(10,10,12,.45) 45%,rgba(10,10,12,1) 100%)}
+.hero-ov2{position:absolute;inset:0;background:linear-gradient(to right,rgba(10,10,12,.7) 0%,transparent 60%)}
+.hero-content{position:relative;z-index:2;flex:1;display:flex;align-items:center;max-width:1200px;margin:0 auto;padding:100px 32px 60px}
+.hero-inner{max-width:680px}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:10px;text-transform:uppercase;letter-spacing:.28em;color:var(--gold);margin-bottom:28px}
+.eyebrow::before{content:'';width:32px;height:1px;background:var(--gold)}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(44px,7vw,88px);line-height:1.02;letter-spacing:-.02em;color:#f5efe2;font-weight:700}
+.hero p{margin-top:24px;font-size:17px;line-height:1.75;color:var(--cream2);max-width:500px}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--bg);padding:14px 28px;border-radius:100px;font-size:13px;font-weight:600;letter-spacing:.04em;text-decoration:none;transition:background .25s,transform .25s}
+.btn-primary:hover{background:var(--gold-lt);transform:translateY(-2px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(241,236,226,.22);color:var(--cream);padding:14px 28px;border-radius:100px;font-size:13px;font-weight:500;letter-spacing:.04em;text-decoration:none;transition:border-color .25s,color .25s}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.hero-pills{display:flex;flex-wrap:wrap;gap:24px;margin-top:40px;font-size:12px;color:var(--muted)}
+.hero-pill{display:flex;align-items:center;gap:7px}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero-bar{position:relative;z-index:2;border-top:1px solid rgba(255,255,255,.06);background:rgba(10,10,12,.5);backdrop-filter:blur(8px)}
+.hero-bar-inner{max-width:1200px;margin:0 auto;padding:0 32px;display:grid;grid-template-columns:repeat(4,1fr)}
+.hero-bar-item{padding:18px 0 18px 24px;font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);border-right:1px solid rgba(255,255,255,.06)}
+.hero-bar-item:first-child{padding-left:0}
+.hero-bar-item:last-child{border-right:none}
+.hero-bar-num{font-size:9px;color:var(--dim);margin-bottom:4px}
 
-  .btn-outline {
-    border: 1px solid rgba(241,236,226,0.25);
-    color: #f1ece2;
-    transition: border-color .3s ease, color .3s ease;
-  }
-  .btn-outline:hover { border-color: #c9a467; color: #c9a467; }
+/* MARQUEE */
+.marquee-wrap{border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);background:var(--bg2);overflow:hidden}
+.marquee-track{display:flex;white-space:nowrap;animation:mq 45s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+.marquee-item{display:flex;align-items:center;gap:24px;padding:18px 32px;font-family:'Playfair Display',serif;font-style:italic;font-size:18px;color:var(--muted)}
+.mq-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0}
 
-  .lift { transition: transform .5s cubic-bezier(.22,1,.36,1); }
-  .lift:hover { transform: translateY(-6px); }
+/* SECTION */
+.sec{padding:96px 32px}
+.sec-inner{max-width:1200px;margin:0 auto}
+.sec-head{margin-bottom:60px}
+.sec-head.flex{display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+.sec-sub{font-size:9px;text-transform:uppercase;letter-spacing:.28em;color:var(--gold);display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.sec-sub::before{content:'';width:28px;height:1px;background:var(--gold)}
+.sec-h2{font-family:'Playfair Display',serif;font-size:clamp(38px,5.5vw,70px);line-height:1.05;letter-spacing:-.02em;font-weight:700}
+.sec-desc{max-width:400px;color:var(--muted);line-height:1.75}
 
-  @keyframes kenburns { 0% { transform: scale(1.05);} 100% { transform: scale(1.15);} }
-  .kenburns { animation: kenburns 18s ease-in-out infinite alternate; }
+/* PACKAGES */
+.pkgs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pkg{background:var(--bg3);border:1px solid var(--card-b);border-radius:20px;padding:32px;display:flex;flex-direction:column;transition:transform .4s cubic-bezier(.22,1,.36,1),border-color .3s;position:relative;overflow:hidden}
+.pkg:hover{transform:translateY(-6px);border-color:rgba(201,164,103,.22)}
+.pkg.feat{border-color:rgba(201,164,103,.45);background:linear-gradient(160deg,#1a1611 0%,#0f0e0c 100%);grid-column:span 2}
+.pkg-badge{position:absolute;top:20px;right:20px;font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:var(--gold);border:1px solid rgba(201,164,103,.35);border-radius:100px;padding:5px 12px}
+.pkg-num{font-family:'Playfair Display',serif;font-style:italic;font-size:48px;color:rgba(201,164,103,.8);line-height:1;margin-bottom:20px}
+.pkg-title{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:4px;font-weight:600}
+.pkg-sub2{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:24px}
+.pkg-feats{list-style:none;flex:1;margin-bottom:28px}
+.pkg-feats li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--cream2);padding:6px 0}
+.chk{width:14px;height:14px;border-radius:50%;background:rgba(201,164,103,.12);border:1px solid rgba(201,164,103,.28);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.chk::after{content:'';width:5px;height:3px;border-left:1.5px solid var(--gold);border-bottom:1.5px solid var(--gold);transform:rotate(-45deg) translateY(-1px)}
+.pkg-prow{border-top:1px solid rgba(255,255,255,.08);padding-top:20px;display:flex;align-items:flex-end;justify-content:space-between}
+.pkg-plbl{font-size:9px;text-transform:uppercase;letter-spacing:.22em;color:var(--dim);margin-bottom:6px}
+.pkg-p{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);letter-spacing:-.01em}
+.pkg-p .sep{color:#3a3832;margin:0 2px;font-size:16px}
+.pkg-bk{font-size:12px;color:var(--cream2);letter-spacing:.06em;text-decoration:none;text-transform:uppercase;transition:color .2s;display:flex;align-items:center;gap:5px}
+.pkg-bk:hover{color:var(--gold)}
+.pkg-bk::after{content:'↗';font-size:11px}
 
-  @keyframes marquee { 0% { transform: translateX(0);} 100% { transform: translateX(-50%);} }
-  .marquee-track { animation: marquee 40s linear infinite; }
+/* NOTE */
+.note-wrap{padding:0 32px 80px;max-width:calc(1200px + 64px);margin:0 auto}
+.note-card{border:1px solid rgba(201,164,103,.22);background:linear-gradient(to right,#141210,#0d0c0b);border-radius:18px;padding:32px 36px;display:flex;align-items:flex-start;gap:20px}
+.note-ico{width:48px;height:48px;border-radius:50%;background:rgba(201,164,103,.08);border:1px solid rgba(201,164,103,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px}
+.note-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.22em;color:var(--gold);margin-bottom:8px}
+.note-card p{font-size:14px;color:#cfc8b9;line-height:1.75}
 
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .9s ease, transform .9s cubic-bezier(.22,1,.36,1); }
-  .reveal.in { opacity: 1; transform: translateY(0); }
+/* GALLERY */
+.gal-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:12px}
+.gal-item{position:relative;overflow:hidden;border-radius:12px;background:var(--bg3);cursor:pointer}
+.gal-item:nth-child(1){grid-row:span 2}
+.gal-item:nth-child(6){grid-row:span 2}
+.gal-item img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.22,1,.36,1),filter .4s;filter:brightness(.9)}
+.gal-item:hover img{transform:scale(1.08);filter:brightness(1)}
+.gal-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,12,.65),transparent 50%);opacity:0;transition:opacity .4s}
+.gal-item:hover .gal-ov{opacity:1}
 
-  .numeral { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; letter-spacing: -.02em; }
-  .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(201,164,103,.4), transparent); }
+/* QUOTE */
+.quote-sec{position:relative;padding:120px 32px;overflow:hidden;text-align:center}
+.qbg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?q=75&w=2000&auto=format&fit=crop');background-size:cover;background-position:center;opacity:.12}
+.qbg2{position:absolute;inset:0;background:linear-gradient(to bottom,var(--bg) 0%,rgba(10,10,12,.7) 50%,var(--bg) 100%)}
+.q-inner{position:relative;z-index:2;max-width:900px;margin:0 auto}
+.q-mark{font-family:'Playfair Display',serif;font-size:80px;line-height:.6;color:var(--gold);opacity:.4;margin-bottom:24px;display:block}
+.q-text{font-family:'Playfair Display',serif;font-size:clamp(22px,3.5vw,40px);line-height:1.22;letter-spacing:-.01em;color:#f5efe2}
+.q-rule{width:40px;height:1px;background:var(--gold);margin:32px auto 12px}
+.q-attr{font-size:10px;text-transform:uppercase;letter-spacing:.28em;color:var(--muted)}
 
-  .nav { transition: background .5s ease, border-color .5s ease, backdrop-filter .5s ease; }
-  .nav.scrolled {
-    background: rgba(11,11,13,.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255,255,255,.05);
-  }
+/* CONTACT */
+.con-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.con-left{position:sticky;top:100px}
+.con-left p{margin-top:20px;color:var(--muted);line-height:1.8;max-width:360px}
+.con-left .btn-primary{margin-top:28px}
+.info-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px}
+.info-card{background:var(--bg3);border:1px solid var(--card-b);border-radius:16px;padding:24px;transition:border-color .3s,transform .4s cubic-bezier(.22,1,.36,1)}
+.info-card:hover{border-color:rgba(201,164,103,.22);transform:translateY(-4px)}
+.info-ico{width:40px;height:40px;border-radius:50%;background:rgba(201,164,103,.08);border:1px solid rgba(201,164,103,.2);display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:16px}
+.info-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.26em;color:var(--dim);margin-bottom:8px}
+.info-val{font-family:'Playfair Display',serif;font-size:16px;color:#f5efe2;line-height:1.3;margin-bottom:6px}
+.info-val a{color:inherit;text-decoration:none;transition:color .2s}
+.info-val a:hover{color:var(--gold)}
+.info-desc2{font-size:12px;color:var(--muted)}
+.copy-btn{background:none;border:none;cursor:pointer;font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);display:flex;align-items:center;gap:5px;margin-top:10px;padding:0;transition:color .2s}
+.copy-btn:hover{color:var(--gold)}
 
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: #0b0b0d; }
-  ::-webkit-scrollbar-thumb { background: #2a2a2e; border-radius: 6px; }
-  ::-webkit-scrollbar-thumb:hover { background: #3a3a3e; }
+/* FORM */
+.form-card{background:var(--bg3);border:1px solid var(--card-b);border-radius:20px;padding:36px}
+.form-title{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px}
+.form-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.fg label{font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--muted)}
+.fg input,.fg select,.fg textarea{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;color:var(--cream);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s,background .2s;width:100%;-webkit-appearance:none}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--dim)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(201,164,103,.5);background:rgba(201,164,103,.04)}
+.fg select{cursor:pointer}
+.fg select option{background:#1a1a1e;color:var(--cream)}
+.fg textarea{resize:vertical;min-height:110px}
+.form-btn{width:100%;padding:15px;background:var(--gold);color:var(--bg);border:none;border-radius:100px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;letter-spacing:.04em;cursor:pointer;transition:background .25s,transform .25s;margin-top:8px}
+.form-btn:hover{background:var(--gold-lt);transform:translateY(-1px)}
+.form-note{font-size:11px;color:var(--dim);text-align:center;margin-top:14px}
+.form-ok{display:none;text-align:center;padding:20px;background:rgba(201,164,103,.07);border:1px solid rgba(201,164,103,.25);border-radius:12px;margin-top:14px}
+.form-ok.show{display:block}
+.form-ok p{font-size:14px;color:var(--cream2)}
+.form-ok strong{color:var(--gold)}
 
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 24px; right: 24px;
-    background: #16161a; border: 1px solid rgba(201,164,103,.35);
-    color: #f1ece2; padding: 14px 18px; border-radius: 12px;
-    font-size: 14px; opacity: 0; transform: translateY(20px);
-    transition: opacity .3s ease, transform .3s ease;
-    z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,.4);
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.05);background:#090909;padding:72px 32px 36px}
+.foot-inner{max-width:1200px;margin:0 auto}
+.foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:60px;padding-bottom:56px}
+.foot-brand p{font-size:13px;color:#8a8478;line-height:1.8;max-width:280px;margin-top:16px}
+.foot-col-ttl{font-size:9px;text-transform:uppercase;letter-spacing:.28em;color:var(--dim);margin-bottom:20px}
+.foot-links{list-style:none}
+.foot-links li{margin-bottom:10px}
+.foot-links a{font-size:13px;color:#cfc8b9;text-decoration:none;transition:color .2s}
+.foot-links a:hover{color:var(--gold)}
+.foot-div{height:1px;background:linear-gradient(to right,transparent,rgba(201,164,103,.25),transparent);margin-bottom:28px}
+.foot-bot{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--dim)}
+.foot-offer{display:flex;align-items:center;gap:7px}
+.foot-offer::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.socials{display:flex;gap:10px;margin-top:20px}
+.soc{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#cfc8b9;text-decoration:none;font-size:13px;transition:border-color .2s,color .2s}
+.soc:hover{border-color:rgba(201,164,103,.4);color:var(--gold)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:200;background:#16161a;border:1px solid rgba(201,164,103,.3);color:var(--cream);padding:12px 18px;border-radius:10px;font-size:13px;opacity:0;transform:translateY(12px);transition:opacity .3s,transform .3s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(28px);transition:opacity .85s ease,transform .85s cubic-bezier(.22,1,.36,1)}
+.rev.in{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .pkgs-grid{grid-template-columns:1fr 1fr}
+  .pkg.feat{grid-column:span 2}
+  .gal-grid{grid-template-columns:repeat(3,1fr);grid-auto-rows:180px}
+  .con-grid{grid-template-columns:1fr;gap:48px}
+  .con-left{position:static}
+  .foot-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .sec{padding:72px 20px}
+  .hero-content{padding-left:20px;padding-right:20px}
+  .pkgs-grid{grid-template-columns:1fr}
+  .pkg.feat{grid-column:span 1}
+  .gal-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}
+  .gal-item:nth-child(1),.gal-item:nth-child(6){grid-row:span 1}
+  .hero-bar-inner{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr}
+  .info-cards{grid-template-columns:1fr}
+  .foot-top{grid-template-columns:1fr;gap:36px}
+  .foot-bot{flex-direction:column;gap:10px;text-align:center}
+  .sec-head.flex{flex-direction:column;align-items:flex-start}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .note-wrap{padding:0 20px 64px}
+  .note-card{flex-direction:column;padding:24px}
+  .form-card{padding:24px}
+}
+@media(max-width:480px){
+  .hero-bar-inner{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
-
 <body>
 
-<!-- ===== NAV ===== -->
-<header id=\"nav\" class=\"nav fixed top-0 inset-x-0 z-50\">
-  <div class=\"max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between\">
-    <a href=\"#top\" class=\"flex items-center gap-3 group\">
-      <div class=\"w-9 h-9 rounded-full border border-[#c9a467]/60 flex items-center justify-center group-hover:border-[#c9a467] transition-colors\">
-        <span class=\"font-serif italic text-[#c9a467] text-sm\">JS</span>
-      </div>
-      <div class=\"leading-tight\">
-        <div class=\"font-serif text-lg tracking-wide\">JS Valeting</div>
-        <div class=\"text-[10px] uppercase tracking-[0.22em] text-[#a09a8f]\">Mobile — North West</div>
+<!-- NAV -->
+<header id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo">
+      <div class="logo-badge"><span>JS</span></div>
+      <div>
+        <div class="logo-name">JS Valeting</div>
+        <div class="logo-sub">Mobile &middot; North West</div>
       </div>
     </a>
-
-    <nav class=\"hidden md:flex items-center gap-9\">
-      <a href=\"#services\" class=\"text-sm tracking-wide text-[#d8d2c4] hover:text-[#c9a467] transition-colors\">Packages</a>
-      <a href=\"#gallery\"  class=\"text-sm tracking-wide text-[#d8d2c4] hover:text-[#c9a467] transition-colors\">Gallery</a>
-      <a href=\"#about\"    class=\"text-sm tracking-wide text-[#d8d2c4] hover:text-[#c9a467] transition-colors\">About</a>
-      <a href=\"#contact\"  class=\"text-sm tracking-wide text-[#d8d2c4] hover:text-[#c9a467] transition-colors\">Contact</a>
-      <a href=\"#contact\"  class=\"btn-gold px-5 py-2.5 rounded-full text-sm font-medium\">Book Now</a>
+    <nav class="nav-links">
+      <a href="#services">Packages</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="nav-cta">Book Now</a>
     </nav>
-
-    <button id=\"menuBtn\" class=\"md:hidden w-10 h-10 flex items-center justify-center\" aria-label=\"Toggle menu\">
-      <i data-lucide=\"menu\" class=\"text-[#f1ece2]\"></i>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
     </button>
   </div>
-
-  <div id=\"mobileMenu\" class=\"md:hidden hidden bg-[#0b0b0d]/95 backdrop-blur-md border-t border-white/5\">
-    <div class=\"px-6 py-6 flex flex-col gap-5\">
-      <a href=\"#services\" class=\"text-base tracking-wide text-[#d8d2c4] hover:text-[#c9a467]\">Packages</a>
-      <a href=\"#gallery\"  class=\"text-base tracking-wide text-[#d8d2c4] hover:text-[#c9a467]\">Gallery</a>
-      <a href=\"#about\"    class=\"text-base tracking-wide text-[#d8d2c4] hover:text-[#c9a467]\">About</a>
-      <a href=\"#contact\"  class=\"text-base tracking-wide text-[#d8d2c4] hover:text-[#c9a467]\">Contact</a>
-      <a href=\"#contact\"  class=\"btn-gold inline-block self-start px-5 py-2.5 rounded-full text-sm font-medium\">Book Now</a>
-    </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#services">Packages</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#contact" class="mob-cta">Book Now</a>
   </div>
 </header>
 
-<!-- ===== HERO ===== -->
-<section id=\"top\" class=\"relative min-h-screen overflow-hidden\">
-  <div class=\"absolute inset-0\">
-    <div class=\"absolute inset-0 bg-cover bg-center kenburns\"
-         style=\"background-image:url('https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=90&w=2400&auto=format&fit=crop')\"></div>
-    <div class=\"absolute inset-0 bg-gradient-to-b from-[#0b0b0d]/85 via-[#0b0b0d]/55 to-[#0b0b0d]\"></div>
-    <div class=\"absolute inset-0 bg-gradient-to-r from-[#0b0b0d]/80 via-transparent to-transparent\"></div>
-  </div>
-
-  <div class=\"relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-40 pb-24 lg:pt-48 lg:pb-32\">
-    <div class=\"max-w-3xl\">
-      <div class=\"flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-[#c9a467] mb-8\">
-        <span class=\"w-8 h-px bg-[#c9a467]\"></span>
-        <span>Mobile Valeting — North West England</span>
-      </div>
-
-      <h1 class=\"font-serif text-5xl sm:text-6xl lg:text-8xl leading-[1.02] tracking-tight text-[#f5efe2]\">
-        Your Car,<br/>
-        <span class=\"italic text-gold\">Your Driveway,</span><br/>
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-ov2"></div>
+  <div class="hero-content">
+    <div class="hero-inner">
+      <div class="eyebrow">Mobile Valeting &middot; North West England</div>
+      <h1 class="serif">
+        Your Car,<br>
+        <span class="gold-text" style="font-style:italic">Your Driveway,</span><br>
         Our Craft.
       </h1>
-
-      <p class=\"mt-8 max-w-xl text-base lg:text-lg leading-relaxed text-[#bdb6a8]\">
-        We travel to you across Liverpool, Manchester and the surrounding North West — so you don't have to lift a finger. Unlock the car. That's it.
-      </p>
-
-      <div class=\"mt-10 flex flex-wrap items-center gap-4\">
-        <a href=\"#services\" class=\"btn-gold inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium\">
-          Our Packages <i data-lucide=\"arrow-up-right\" class=\"w-4 h-4\"></i>
-        </a>
-        <a href=\"#contact\" class=\"btn-outline inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium\">
-          Book Now <i data-lucide=\"arrow-up-right\" class=\"w-4 h-4\"></i>
-        </a>
+      <p>We travel to you across Liverpool, Manchester and the surrounding North West &mdash; so you don't have to lift a finger. Unlock the car. That's it.</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn-primary">Our Packages &nbsp;&#x2197;</a>
+        <a href="#contact" class="btn-ghost">Book a Valet</a>
       </div>
-
-      <div class=\"mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 text-sm text-[#a09a8f]\">
-        <div class=\"flex items-center gap-2\">
-          <span class=\"inline-block w-1.5 h-1.5 rounded-full bg-[#c9a467] animate-pulse\"></span>
-          10% off for new customers
-        </div>
-        <div class=\"flex items-center gap-2\">
-          <i data-lucide=\"map-pin\" class=\"w-3.5 h-3.5 text-[#c9a467]\"></i>
-          Liverpool · Manchester · North West
-        </div>
+      <div class="hero-pills">
+        <span class="hero-pill"><span class="dot"></span>10% off for new customers</span>
+        <span class="hero-pill">&#128205; Liverpool &middot; Manchester &middot; North West</span>
       </div>
     </div>
   </div>
-
-  <div class=\"relative z-10 border-t border-white/5 bg-[#0b0b0d]/60 backdrop-blur-sm\">
-    <div class=\"max-w-7xl mx-auto px-6 lg:px-10 py-5 grid grid-cols-2 md:grid-cols-4 gap-6 text-xs uppercase tracking-[0.18em] text-[#a09a8f]\">
-      <div><div class=\"text-[10px] text-[#7a7468] mb-1\">01</div>We Come To You</div>
-      <div><div class=\"text-[10px] text-[#7a7468] mb-1\">02</div>Pro-Grade Products</div>
-      <div><div class=\"text-[10px] text-[#7a7468] mb-1\">03</div>Five Tiered Packages</div>
-      <div><div class=\"text-[10px] text-[#7a7468] mb-1\">04</div>Trusted Local Team</div>
+  <div class="hero-bar">
+    <div class="hero-bar-inner">
+      <div class="hero-bar-item"><div class="hero-bar-num">01</div>We Come To You</div>
+      <div class="hero-bar-item"><div class="hero-bar-num">02</div>Pro-Grade Products</div>
+      <div class="hero-bar-item"><div class="hero-bar-num">03</div>Five Tiered Packages</div>
+      <div class="hero-bar-item"><div class="hero-bar-num">04</div>Trusted Local Team</div>
     </div>
   </div>
 </section>
 
-<!-- ===== MARQUEE ===== -->
-<section class=\"border-y border-white/5 bg-[#0e0e11] overflow-hidden\">
-  <div id=\"marquee\" class=\"flex marquee-track whitespace-nowrap py-5\"></div>
-</section>
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="mqTrack"></div>
+</div>
 
-<!-- ===== SERVICES ===== -->
-<section id=\"services\" class=\"py-28 lg:py-36 px-6 lg:px-10\">
-  <div class=\"max-w-7xl mx-auto\">
-    <div class=\"flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16 reveal\">
+<!-- PACKAGES -->
+<section class="sec" id="services" style="background:var(--bg)">
+  <div class="sec-inner">
+    <div class="sec-head flex rev">
       <div>
-        <div class=\"flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-[#c9a467] mb-5\">
-          <span class=\"w-8 h-px bg-[#c9a467]\"></span> Valet Packages
-        </div>
-        <h2 class=\"font-serif text-5xl lg:text-7xl leading-[1.04] tracking-tight\">
-          What We <span class=\"italic text-gold\">Offer</span>
-        </h2>
+        <div class="sec-sub">Valet Packages</div>
+        <h2 class="sec-h2 serif">What We <span class="gold-text" style="font-style:italic">Offer</span></h2>
       </div>
-      <p class=\"max-w-md text-[#a09a8f] text-base leading-relaxed\">
-        Five levels of care — from a quick interior freshen to a complete inside-out transformation. All delivered to your door.
-      </p>
+      <p class="sec-desc">Five levels of care &mdash; from a quick interior freshen to a complete inside-out transformation. All delivered to your door.</p>
     </div>
-
-    <div id=\"packages\" class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\"></div>
+    <div class="pkgs-grid" id="pkgsGrid"></div>
   </div>
 </section>
 
-<!-- ===== NOTE ===== -->
-<section class=\"px-6 lg:px-10 pb-24\">
-  <div class=\"max-w-7xl mx-auto reveal\">
-    <div class=\"relative overflow-hidden rounded-2xl border border-[#c9a467]/25 bg-gradient-to-r from-[#171410] to-[#0f0e0d] p-8 lg:p-10 flex flex-col md:flex-row md:items-center gap-6\">
-      <div class=\"flex items-center justify-center w-14 h-14 rounded-full bg-[#c9a467]/10 border border-[#c9a467]/30 shrink-0\">
-        <i data-lucide=\"info\" class=\"text-[#c9a467] w-5 h-5\"></i>
-      </div>
-      <div class=\"flex-1\">
-        <div class=\"text-xs uppercase tracking-[0.22em] text-[#c9a467] mb-2\">A Note On Heavily Soiled Vehicles</div>
-        <p class=\"text-[#cfc8b9] leading-relaxed\">
-          Extreme dog hair, heavy mud, paint or oil stains — price to be discussed individually before booking. We'll always be upfront and fair before any work begins.
-        </p>
-      </div>
+<!-- NOTE -->
+<div class="note-wrap rev">
+  <div class="note-card">
+    <div class="note-ico">&#8505;</div>
+    <div>
+      <div class="note-lbl">A Note On Heavily Soiled Vehicles</div>
+      <p>Extreme dog hair, heavy mud, paint or oil stains &mdash; price to be discussed individually before booking. We'll always be upfront and fair before any work begins.</p>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ===== GALLERY ===== -->
-<section id=\"gallery\" class=\"py-28 lg:py-36 px-6 lg:px-10 bg-[#0e0e11]\">
-  <div class=\"max-w-7xl mx-auto\">
-    <div class=\"flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16 reveal\">
+<!-- GALLERY -->
+<section class="sec" id="gallery" style="background:var(--bg2)">
+  <div class="sec-inner">
+    <div class="sec-head flex rev">
       <div>
-        <div class=\"flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-[#c9a467] mb-5\">
-          <span class=\"w-8 h-px bg-[#c9a467]\"></span> Recent Work
-        </div>
-        <h2 class=\"font-serif text-5xl lg:text-7xl leading-[1.04] tracking-tight\">
-          The <span class=\"italic text-gold\">Finish.</span>
-        </h2>
+        <div class="sec-sub">Recent Work</div>
+        <h2 class="sec-h2 serif">The <span class="gold-text" style="font-style:italic">Finish.</span></h2>
       </div>
-      <p class=\"max-w-md text-[#a09a8f] text-base leading-relaxed\">
-        A small selection from our recent visits across Liverpool, Manchester and the wider North West.
-      </p>
+      <p class="sec-desc">A selection from our recent visits across Liverpool, Manchester and the wider North West.</p>
     </div>
-
-    <div id=\"gallery-grid\" class=\"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4\"></div>
+    <div class="gal-grid" id="galGrid"></div>
   </div>
 </section>
 
-<!-- ===== QUOTE / ABOUT ===== -->
-<section id=\"about\" class=\"relative py-32 lg:py-40 px-6 lg:px-10 overflow-hidden\">
-  <div class=\"absolute inset-0 bg-cover bg-center opacity-[0.18]\"
-       style=\"background-image:url('https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?q=80&w=2000&auto=format&fit=crop')\"></div>
-  <div class=\"absolute inset-0 bg-gradient-to-b from-[#0b0b0d] via-[#0b0b0d]/85 to-[#0b0b0d]\"></div>
-
-  <div class=\"relative max-w-5xl mx-auto text-center reveal\">
-    <i data-lucide=\"quote\" class=\"text-[#c9a467] w-9 h-9 mx-auto mb-8\"></i>
-    <p class=\"font-serif text-3xl sm:text-4xl lg:text-5xl leading-[1.18] tracking-tight text-[#f5efe2]\">
-      \"We don't want you to fit <span class=\"italic text-gold\">us</span> into your day. We fit into yours — at home, at work, wherever suits you across the North West.\"
+<!-- QUOTE -->
+<section class="quote-sec" id="about">
+  <div class="qbg"></div>
+  <div class="qbg2"></div>
+  <div class="q-inner rev">
+    <span class="q-mark">&ldquo;</span>
+    <p class="q-text serif">
+      We don't want you to fit <span class="gold-text" style="font-style:italic">us</span> into your day.<br>
+      We fit into yours &mdash; at home, at work,<br>wherever suits you across the North West.
     </p>
-    <div class=\"mt-10 flex flex-col items-center gap-2\">
-      <div class=\"w-10 h-px bg-[#c9a467]\"></div>
-      <div class=\"text-sm uppercase tracking-[0.28em] text-[#a09a8f]\">Adam Donda &amp; Jan Sivák</div>
-    </div>
-    <a href=\"#contact\" class=\"btn-gold mt-12 inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium\">
-      Book Your Valet <i data-lucide=\"arrow-up-right\" class=\"w-4 h-4\"></i>
-    </a>
+    <div class="q-rule"></div>
+    <div class="q-attr">Adam Donda &amp; Jan Siv&aacute;k &mdash; Founders</div>
+    <br><br>
+    <a href="#contact" class="btn-primary">Book Your Valet &nbsp;&#x2197;</a>
   </div>
 </section>
 
-<!-- ===== CONTACT ===== -->
-<section id=\"contact\" class=\"py-28 lg:py-36 px-6 lg:px-10\">
-  <div class=\"max-w-7xl mx-auto\">
-    <div class=\"grid lg:grid-cols-12 gap-12 lg:gap-16 items-start\">
-      <div class=\"lg:col-span-5 reveal lg:sticky lg:top-32\">
-        <div class=\"flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-[#c9a467] mb-5\">
-          <span class=\"w-8 h-px bg-[#c9a467]\"></span> Get In Touch
+<!-- CONTACT -->
+<section class="sec" id="contact" style="background:var(--bg)">
+  <div class="sec-inner">
+    <div class="con-grid">
+      <div class="con-left rev">
+        <div class="sec-sub">Get In Touch</div>
+        <h2 class="sec-h2 serif">Get Your Car <span class="gold-text" style="font-style:italic">Sorted.</span></h2>
+        <p>Drop us a message with your postcode, vehicle size and the package you're after &mdash; we'll come back with a time that works for you.</p>
+        <a href="mailto:js.mobilecarvaleting@gmail.com" class="btn-primary">Email Us &nbsp;&#x2197;</a>
+
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-ico">&#9993;</div>
+            <div class="info-lbl">Email</div>
+            <div class="info-val"><a href="mailto:js.mobilecarvaleting@gmail.com" style="word-break:break-all">js.mobilecarvaleting@gmail.com</a></div>
+            <div class="info-desc2">Bookings &amp; enquiries</div>
+            <button class="copy-btn" onclick="copyEmail()">&#10697; Copy email</button>
+          </div>
+          <div class="info-card">
+            <div class="info-ico">&#128205;</div>
+            <div class="info-lbl">Coverage</div>
+            <div class="info-val">Liverpool, Manchester &amp; North West</div>
+            <div class="info-desc2">We come to your location</div>
+          </div>
+          <div class="info-card">
+            <div class="info-ico">&#10024;</div>
+            <div class="info-lbl">New Customers</div>
+            <div class="info-val">10% off your first booking</div>
+            <div class="info-desc2">Mention it when you get in touch</div>
+          </div>
+          <div class="info-card">
+            <div class="info-ico">&#128101;</div>
+            <div class="info-lbl">The Team</div>
+            <div class="info-val">Adam Donda &amp; Jan Siv&aacute;k</div>
+            <div class="info-desc2">Local detailers &mdash; fully insured</div>
+          </div>
         </div>
-        <h2 class=\"font-serif text-5xl lg:text-7xl leading-[1.02] tracking-tight\">
-          Get Your Car <span class=\"italic text-gold\">Sorted.</span>
-        </h2>
-        <p class=\"mt-6 text-[#a09a8f] leading-relaxed max-w-md\">
-          Drop us a line with your postcode, vehicle size and the package you're after — we'll come back with a time that works for you.
-        </p>
-        <a href=\"mailto:js.mobilecarvaleting@gmail.com\" class=\"btn-gold mt-8 inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-medium\">
-          Email Us <i data-lucide=\"arrow-up-right\" class=\"w-4 h-4\"></i>
-        </a>
       </div>
 
-      <div class=\"lg:col-span-7 grid sm:grid-cols-2 gap-4\">
-        <div class=\"reveal lift rounded-2xl border border-white/10 bg-[#121215] p-7 flex flex-col gap-4\">
-          <div class=\"flex items-center justify-between\">
-            <div class=\"w-11 h-11 rounded-full bg-[#c9a467]/10 border border-[#c9a467]/25 flex items-center justify-center\">
-              <i data-lucide=\"mail\" class=\"text-[#c9a467] w-4 h-4\"></i>
+      <div class="rev">
+        <div class="form-card">
+          <div class="form-title serif">Request a Booking</div>
+          <div class="form-sub">We'll get back to you within a few hours to confirm your slot.</div>
+
+          <div class="form-row">
+            <div class="fg"><label>First name *</label><input type="text" id="fn" placeholder="Adam" autocomplete="given-name" /></div>
+            <div class="fg"><label>Last name *</label><input type="text" id="ln" placeholder="Smith" autocomplete="family-name" /></div>
+          </div>
+          <div class="fg"><label>Email address *</label><input type="email" id="em" placeholder="you@example.com" autocomplete="email" /></div>
+          <div class="fg"><label>Phone (optional)</label><input type="tel" id="ph" placeholder="+44 7700 900000" autocomplete="tel" /></div>
+          <div class="fg"><label>Postcode *</label><input type="text" id="pc" placeholder="L1 1AA" /></div>
+          <div class="form-row">
+            <div class="fg">
+              <label>Vehicle size *</label>
+              <select id="vs">
+                <option value="">Select size</option>
+                <option value="Small">Small (hatchback, city car)</option>
+                <option value="Medium">Medium (saloon, coupe)</option>
+                <option value="Large">Large (SUV, estate, van)</option>
+              </select>
             </div>
-            <button onclick=\"copyEmail()\" class=\"inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-[#a09a8f] hover:text-[#c9a467] transition-colors\">
-              <i data-lucide=\"copy\" class=\"w-3 h-3\"></i> Copy
-            </button>
+            <div class="fg">
+              <label>Package *</label>
+              <select id="vp">
+                <option value="">Select package</option>
+                <option value="Valet 1 — Interior Refresh">Valet 1 — Interior Refresh</option>
+                <option value="Valet 2 — Interior Deep Clean">Valet 2 — Interior Deep Clean</option>
+                <option value="Valet 3 — Exterior Care">Valet 3 — Exterior Care</option>
+                <option value="Valet 4 — Deep Exterior Care">Valet 4 — Deep Exterior Care</option>
+                <option value="Valet 5 — Full Care">Valet 5 — Full Care</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <div class=\"text-[10px] uppercase tracking-[0.28em] text-[#7a7468] mb-2\">Email</div>
-            <a href=\"mailto:js.mobilecarvaleting@gmail.com\" class=\"font-serif text-lg md:text-xl text-[#f5efe2] hover:text-[#c9a467] transition-colors break-all\">
-              js.mobilecarvaleting@gmail.com
-            </a>
-            <div class=\"mt-2 text-sm text-[#a09a8f]\">Bookings &amp; all enquiries</div>
-          </div>
-        </div>
-
-        <div class=\"reveal lift rounded-2xl border border-white/10 bg-[#121215] p-7 flex flex-col gap-4\">
-          <div class=\"w-11 h-11 rounded-full bg-[#c9a467]/10 border border-[#c9a467]/25 flex items-center justify-center\">
-            <i data-lucide=\"map-pin\" class=\"text-[#c9a467] w-4 h-4\"></i>
-          </div>
-          <div>
-            <div class=\"text-[10px] uppercase tracking-[0.28em] text-[#7a7468] mb-2\">Coverage</div>
-            <div class=\"font-serif text-lg md:text-xl text-[#f5efe2]\">Liverpool, Manchester &amp; North West</div>
-            <div class=\"mt-2 text-sm text-[#a09a8f]\">We come directly to your location</div>
-          </div>
-        </div>
-
-        <div class=\"reveal lift rounded-2xl border border-white/10 bg-[#121215] p-7 flex flex-col gap-4\">
-          <div class=\"w-11 h-11 rounded-full bg-[#c9a467]/10 border border-[#c9a467]/25 flex items-center justify-center\">
-            <i data-lucide=\"sparkles\" class=\"text-[#c9a467] w-4 h-4\"></i>
-          </div>
-          <div>
-            <div class=\"text-[10px] uppercase tracking-[0.28em] text-[#7a7468] mb-2\">New Customers</div>
-            <div class=\"font-serif text-lg md:text-xl text-[#f5efe2]\">10% off your first booking</div>
-            <div class=\"mt-2 text-sm text-[#a09a8f]\">Mention it when you reach out</div>
-          </div>
-        </div>
-
-        <div class=\"reveal lift rounded-2xl border border-white/10 bg-[#121215] p-7 flex flex-col gap-4\">
-          <div class=\"w-11 h-11 rounded-full bg-[#c9a467]/10 border border-[#c9a467]/25 flex items-center justify-center\">
-            <i data-lucide=\"users\" class=\"text-[#c9a467] w-4 h-4\"></i>
-          </div>
-          <div>
-            <div class=\"text-[10px] uppercase tracking-[0.28em] text-[#7a7468] mb-2\">The Team</div>
-            <div class=\"font-serif text-lg md:text-xl text-[#f5efe2]\">Adam Donda &amp; Jan Sivák</div>
-            <div class=\"mt-2 text-sm text-[#a09a8f]\">Local detailers — fully insured</div>
-          </div>
+          <div class="fg"><label>Message (optional)</label><textarea id="msg" placeholder="Preferred dates, any specific concerns, or questions..."></textarea></div>
+          <button class="form-btn" onclick="sendForm()">Send Booking Request</button>
+          <div class="form-note">We'll reply to your email &mdash; usually within a few hours.</div>
+          <div class="form-ok" id="formOk"><p>&#9989; <strong>Request sent!</strong> We'll be in touch to confirm your slot. Thanks for choosing JS Valeting.</p></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
-<footer class=\"border-t border-white/5 bg-[#0a0a0c] px-6 lg:px-10 pt-16 pb-8\">
-  <div class=\"max-w-7xl mx-auto\">
-    <div class=\"grid md:grid-cols-3 gap-10 pb-12\">
-      <div>
-        <div class=\"flex items-center gap-3 mb-4\">
-          <div class=\"w-9 h-9 rounded-full border border-[#c9a467]/60 flex items-center justify-center\">
-            <span class=\"font-serif italic text-[#c9a467] text-sm\">JS</span>
-          </div>
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="#top" class="logo">
+          <div class="logo-badge"><span>JS</span></div>
           <div>
-            <div class=\"font-serif text-lg\">JS Valeting</div>
-            <div class=\"text-[10px] uppercase tracking-[0.22em] text-[#a09a8f]\">Mobile — North West</div>
+            <div class="logo-name">JS Valeting</div>
+            <div class="logo-sub">Mobile &middot; North West</div>
           </div>
+        </a>
+        <p>Premium mobile car valeting. We come to your driveway across Liverpool, Manchester and the surrounding region.</p>
+        <div class="socials">
+          <a href="#" class="soc" aria-label="Instagram">&#9671;</a>
+          <a href="mailto:js.mobilecarvaleting@gmail.com" class="soc" aria-label="Email">&#9993;</a>
         </div>
-        <p class=\"text-sm text-[#8a8478] leading-relaxed max-w-xs\">
-          Premium mobile car valeting. We come to your driveway across Liverpool, Manchester and the surrounding region.
-        </p>
       </div>
-
       <div>
-        <div class=\"text-[10px] uppercase tracking-[0.28em] text-[#7a7468] mb-4\">Explore</div>
-        <ul class=\"space-y-2.5 text-sm\">
-          <li><a href=\"#services\" class=\"text-[#cfc8b9] hover:text-[#c9a467] transition-colors\">Packages</a></li>
-          <li><a href=\"#gallery\"  class=\"text-[#cfc8b9] hover:text-[#c9a467] transition-colors\">Gallery</a></li>
-          <li><a href=\"#about\"    class=\"text-[#cfc8b9] hover:text-[#c9a467] transition-colors\">About</a></li>
-          <li><a href=\"#contact\"  class=\"text-[#cfc8b9] hover:text-[#c9a467] transition-colors\">Contact</a></li>
+        <div class="foot-col-ttl">Explore</div>
+        <ul class="foot-links">
+          <li><a href="#services">Packages</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
-
       <div>
-        <div class=\"text-[10px] uppercase tracking-[0.28em] text-[#7a7468] mb-4\">Reach Us</div>
-        <a href=\"mailto:js.mobilecarvaleting@gmail.com\" class=\"flex items-center gap-2 text-sm text-[#cfc8b9] hover:text-[#c9a467] transition-colors mb-2\">
-          <i data-lucide=\"mail\" class=\"w-3.5 h-3.5\"></i> js.mobilecarvaleting@gmail.com
-        </a>
-        <div class=\"text-sm text-[#8a8478] mb-5\">Liverpool, Manchester &amp; North West</div>
-        <div class=\"flex items-center gap-3\">
-          <a href=\"#\" aria-label=\"Instagram\" class=\"w-9 h-9 rounded-full border border-white/10 flex items-center justify-center text-[#cfc8b9] hover:text-[#c9a467] hover:border-[#c9a467]/40 transition-colors\">
-            <i data-lucide=\"instagram\" class=\"w-4 h-4\"></i>
-          </a>
-        </div>
+        <div class="foot-col-ttl">Reach Us</div>
+        <ul class="foot-links">
+          <li><a href="mailto:js.mobilecarvaleting@gmail.com">js.mobilecarvaleting@gmail.com</a></li>
+          <li><a href="#contact">Liverpool, Manchester &amp; North West</a></li>
+          <li><a href="#contact">New customers &mdash; 10% off</a></li>
+        </ul>
       </div>
     </div>
-
-    <div class=\"divider\"></div>
-
-    <div class=\"pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#7a7468]\">
-      <div>© <span id=\"year\"></span> JS Valeting. All rights reserved.</div>
-      <div class=\"flex items-center gap-2\">
-        <span class=\"inline-block w-1.5 h-1.5 rounded-full bg-[#c9a467]\"></span>
-        New Customer Offer — 10%
-      </div>
+    <div class="foot-div"></div>
+    <div class="foot-bot">
+      <div>&copy; <span id="yr"></span> JS Valeting. All rights reserved.</div>
+      <div class="foot-offer">New customer discount &mdash; 10% off first booking</div>
     </div>
   </div>
 </footer>
 
-<div id=\"toast\" class=\"toast\"></div>
+<div class="toast" id="toast"></div>
 
-<!-- ===== SCRIPT ===== -->
 <script>
-  // ---------- DATA ----------
-  const PACKAGES = [
-    {
-      num: \"01\", title: \"Interior Refresh\", subtitle: \"Valet 1 — Dry Clean\",
-      features: [
-        \"Full vacuum — carpets, mats & boot\",
-        \"Window polishing\",
-        \"Dashboard, console & door panel wipe\",
-        \"Car perfume finish\"
-      ],
-      prices: { S: 35, M: 45, L: 55 }
-    },
-    {
-      num: \"02\", title: \"Interior Deep Clean\", subtitle: \"Valet 2 — Dry & Wet\",
-      features: [
-        \"Deep vacuum\",
-        \"Stain removal\",
-        \"Glass polishing\",
-        \"Fabric / Leather treatment\",
-        \"Dashboard, console & door panel wipe\",
-        \"Car perfume finish\"
-      ],
-      prices: { S: 75, M: 85, L: 95 }
-    },
-    {
-      num: \"03\", title: \"Exterior Care\", subtitle: \"Valet 3 — Basic Exterior\",
-      features: [
-        \"Pre-wash & Snow foam\",
-        \"Wheels & tyres cleaning\",
-        \"Microfibre drying\"
-      ],
-      prices: { S: 35, M: 45, L: 55 }
-    },
-    {
-      num: \"04\", title: \"Deep Exterior Care\", subtitle: \"Valet 4 — Premium Exterior\",
-      features: [
-        \"Pre-wash & Decontamination\",
-        \"Snow foam & Contact wash\",
-        \"Wheel & tyre care\",
-        \"Aqua wax finish\"
-      ],
-      prices: { S: 65, M: 75, L: 85 }
-    },
-    {
-      num: \"05\", title: \"Full Care\", subtitle: \"Valet 5 — The Complete Package\",
-      features: [
-        \"Everything — inside & out, to the highest standard\",
-        \"Complete deep clean of all interior surfaces\",
-        \"Premium full exterior wash & wax treatment\"
-      ],
-      prices: { S: 95, M: 105, L: 115 },
-      highlight: true
-    }
-  ];
+// --- DATA ---
+const PKGS = [
+  { num:'01', title:'Interior Refresh', sub:'Valet 1 — Dry Clean',
+    feats:['Full vacuum — carpets, mats & boot','Window polishing','Dashboard, console & door panel wipe','Car perfume finish'],
+    p:{S:35,M:45,L:55} },
+  { num:'02', title:'Interior Deep Clean', sub:'Valet 2 — Dry & Wet',
+    feats:['Deep vacuum','Stain removal','Glass polishing','Fabric / Leather treatment','Dashboard, console & door panel wipe','Car perfume finish'],
+    p:{S:75,M:85,L:95} },
+  { num:'03', title:'Exterior Care', sub:'Valet 3 — Basic Exterior',
+    feats:['Pre-wash & Snow foam','Wheels & tyres cleaning','Microfibre drying'],
+    p:{S:35,M:45,L:55} },
+  { num:'04', title:'Deep Exterior Care', sub:'Valet 4 — Premium Exterior',
+    feats:['Pre-wash & Decontamination','Snow foam & Contact wash','Wheel & tyre care','Aqua wax finish'],
+    p:{S:65,M:75,L:85} },
+  { num:'05', title:'Full Care', sub:'Valet 5 — The Complete Package',
+    feats:['Everything inside & out — to the highest standard','Complete deep clean of all interior surfaces','Premium full exterior wash & wax treatment'],
+    p:{S:95,M:105,L:115}, feat:true }
+];
 
-  const GALLERY = [
-    \"https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1620288627223-53302f4e8c74?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1603386329225-868f9b1ee6c9?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1617531653332-bd46c16f4d68?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?q=80&w=1200&auto=format&fit=crop\",
-    \"https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?q=80&w=1200&auto=format&fit=crop\"
-  ];
+const GALLERY = [
+  'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1571607388263-1044f9ea01dd?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1616788494707-ec28f08d05a1?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?q=80&w=900&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1625047509168-a7026f36de04?q=80&w=900&auto=format&fit=crop'
+];
 
-  const MARQUEE_ITEMS = [
-    \"Pre-wash\",\"Snow foam\",\"Decontamination\",\"Contact wash\",\"Aqua wax\",
-    \"Deep vacuum\",\"Stain removal\",\"Leather treatment\",\"Glass polish\",\"Wheel care\",\"Perfume finish\"
-  ];
+const MQ = ['Pre-wash','Snow foam','Decontamination','Contact wash','Aqua wax','Deep vacuum','Stain removal','Leather treatment','Glass polish','Wheel care','Perfume finish'];
 
-  // ---------- RENDER PACKAGES ----------
-  const pkgContainer = document.getElementById(\"packages\");
-  PACKAGES.forEach((p, idx) => {
-    const article = document.createElement(\"article\");
-    const highlightCls = p.highlight
-      ? \"border-[#c9a467]/60 bg-gradient-to-b from-[#1a1611] to-[#0f0e0d] lg:col-span-2\"
-      : \"border-white/10 bg-[#121215]\";
-    article.className = `reveal lift group relative overflow-hidden rounded-2xl border ${highlightCls} p-7 lg:p-8 flex flex-col`;
-    article.style.transitionDelay = `${idx * 60}ms`;
+// --- RENDER PACKAGES ---
+const pg = document.getElementById('pkgsGrid');
+PKGS.forEach((p,i) => {
+  const a = document.createElement('article');
+  a.className = 'pkg rev' + (p.feat?' feat':'');
+  a.style.transitionDelay = (i*70)+'ms';
+  a.innerHTML = (p.feat?'<div class="pkg-badge">Most Complete</div>':'')+
+    '<div class="pkg-num">'+p.num+'</div>'+
+    '<div class="pkg-title serif">'+p.title+'</div>'+
+    '<div class="pkg-sub2">'+p.sub+'</div>'+
+    '<ul class="pkg-feats">'+p.feats.map(f=>'<li><span class="chk"></span><span>'+f+'</span></li>').join('')+'</ul>'+
+    '<div class="pkg-prow"><div><div class="pkg-plbl">Small / Medium / Large</div><div class="pkg-p">&pound;'+p.p.S+'<span class="sep">/</span>'+p.p.M+'<span class="sep">/</span>'+p.p.L+'</div></div><a href="#contact" class="pkg-bk">Book</a></div>';
+  pg.appendChild(a);
+});
 
-    article.innerHTML = `
-      ${p.highlight ? `<div class=\"absolute top-5 right-5 text-[10px] uppercase tracking-[0.22em] text-[#c9a467] border border-[#c9a467]/40 rounded-full px-3 py-1\">Most Complete</div>` : \"\"}
-      <div class=\"flex items-baseline justify-between mb-6\">
-        <span class=\"numeral text-5xl text-[#c9a467]/90\">${p.num}</span>
-      </div>
-      <h3 class=\"font-serif text-3xl tracking-tight mb-1\">${p.title}</h3>
-      <p class=\"text-xs uppercase tracking-[0.18em] text-[#a09a8f] mb-6\">${p.subtitle}</p>
-      <ul class=\"flex-1 space-y-2.5 mb-8\">
-        ${p.features.map(f => `
-          <li class=\"flex items-start gap-3 text-sm text-[#cfc8b9]\">
-            <i data-lucide=\"check\" class=\"mt-1 text-[#c9a467] w-3.5 h-3.5 shrink-0\"></i>
-            <span>${f}</span>
-          </li>`).join(\"\")}
-      </ul>
-      <div class=\"border-t border-white/10 pt-5\">
-        <div class=\"flex items-end justify-between\">
-          <div>
-            <div class=\"text-[10px] uppercase tracking-[0.22em] text-[#7a7468] mb-2\">Small / Medium / Large</div>
-            <div class=\"flex items-baseline gap-1 font-serif\">
-              <span class=\"text-2xl text-[#c9a467]\">£${p.prices.S}</span>
-              <span class=\"text-[#5a564d]\">/</span>
-              <span class=\"text-2xl text-[#c9a467]\">${p.prices.M}</span>
-              <span class=\"text-[#5a564d]\">/</span>
-              <span class=\"text-2xl text-[#c9a467]\">${p.prices.L}</span>
-            </div>
-          </div>
-          <a href=\"#contact\" class=\"inline-flex items-center gap-1.5 text-sm text-[#f1ece2] hover:text-[#c9a467] transition-colors\">
-            Book <i data-lucide=\"arrow-up-right\" class=\"w-4 h-4\"></i>
-          </a>
-        </div>
-      </div>
-    `;
-    pkgContainer.appendChild(article);
-  });
+// --- RENDER GALLERY ---
+const gg = document.getElementById('galGrid');
+GALLERY.forEach((src,i) => {
+  const d = document.createElement('div');
+  d.className='gal-item rev';
+  d.style.transitionDelay=(i%6*60)+'ms';
+  d.innerHTML='<img src="'+src+'" alt="Car valeting detail" loading="lazy"><div class="gal-ov"></div>';
+  gg.appendChild(d);
+});
 
-  // ---------- RENDER GALLERY ----------
-  const galleryGrid = document.getElementById(\"gallery-grid\");
-  GALLERY.forEach((src, i) => {
-    const wrap = document.createElement(\"div\");
-    const shape = (i % 5 === 0) ? \"row-span-2 aspect-[3/4]\" : \"aspect-square\";
-    wrap.className = `reveal relative overflow-hidden rounded-xl bg-[#16161a] ${shape}`;
-    wrap.style.transitionDelay = `${(i % 6) * 70}ms`;
-    wrap.innerHTML = `
-      <img src=\"${src}\" alt=\"Detail work\" loading=\"lazy\"
-           class=\"w-full h-full object-cover transition-transform duration-[1200ms] ease-out hover:scale-110\" />
-      <div class=\"absolute inset-0 bg-gradient-to-t from-[#0b0b0d]/70 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity\"></div>
-    `;
-    galleryGrid.appendChild(wrap);
-  });
+// --- MARQUEE ---
+const mt = document.getElementById('mqTrack');
+[...MQ,...MQ].forEach(it => {
+  const d=document.createElement('div');
+  d.className='marquee-item';
+  d.innerHTML='<span>'+it+'</span><span class="mq-dot"></span>';
+  mt.appendChild(d);
+});
 
-  // ---------- RENDER MARQUEE ----------
-  const marquee = document.getElementById(\"marquee\");
-  const items = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
-  items.forEach(it => {
-    const el = document.createElement(\"div\");
-    el.className = \"flex items-center gap-6 px-8 text-[#a09a8f] font-serif italic text-xl\";
-    el.innerHTML = `<span>${it}</span><i data-lucide=\"star\" class=\"w-3 h-3 text-[#c9a467]\" fill=\"#c9a467\"></i>`;
-    marquee.appendChild(el);
-  });
+// --- NAV ---
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>24),{passive:true});
 
-  // ---------- INIT ICONS ----------
-  lucide.createIcons();
+// --- HAMBURGER ---
+const hb=document.getElementById('hamburger'), mm=document.getElementById('mobileMenu');
+hb.addEventListener('click',()=>{hb.classList.toggle('open');mm.classList.toggle('open')});
+mm.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{hb.classList.remove('open');mm.classList.remove('open')}));
 
-  // ---------- NAV SCROLL ----------
-  const nav = document.getElementById(\"nav\");
-  window.addEventListener(\"scroll\", () => {
-    if (window.scrollY > 20) nav.classList.add(\"scrolled\");
-    else nav.classList.remove(\"scrolled\");
-  });
+// --- REVEAL ---
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:0.1});
+document.querySelectorAll('.rev').forEach(el=>io.observe(el));
 
-  // ---------- MOBILE MENU ----------
-  const menuBtn = document.getElementById(\"menuBtn\");
-  const mobileMenu = document.getElementById(\"mobileMenu\");
-  let menuOpen = false;
-  menuBtn.addEventListener(\"click\", () => {
-    menuOpen = !menuOpen;
-    mobileMenu.classList.toggle(\"hidden\", !menuOpen);
-    menuBtn.innerHTML = \"\";
-    const icon = document.createElement(\"i\");
-    icon.setAttribute(\"data-lucide\", menuOpen ? \"x\" : \"menu\");
-    icon.className = \"text-[#f1ece2]\";
-    menuBtn.appendChild(icon);
-    lucide.createIcons();
-  });
-  mobileMenu.querySelectorAll(\"a\").forEach(a =>
-    a.addEventListener(\"click\", () => {
-      menuOpen = false;
-      mobileMenu.classList.add(\"hidden\");
-      menuBtn.innerHTML = \"\";
-      const icon = document.createElement(\"i\");
-      icon.setAttribute(\"data-lucide\", \"menu\");
-      icon.className = \"text-[#f1ece2]\";
-      menuBtn.appendChild(icon);
-      lucide.createIcons();
-    })
+// --- TOAST ---
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+
+// --- COPY ---
+function copyEmail(){
+  const e='js.mobilecarvaleting@gmail.com';
+  if(navigator.clipboard?.writeText){navigator.clipboard.writeText(e).then(()=>showToast('Copied: '+e))}
+  else{showToast('Copy manually: '+e)}
+}
+
+// --- FORM ---
+function sendForm(){
+  const fn=document.getElementById('fn').value.trim();
+  const ln=document.getElementById('ln').value.trim();
+  const em=document.getElementById('em').value.trim();
+  const pc=document.getElementById('pc').value.trim();
+  const vs=document.getElementById('vs').value;
+  const vp=document.getElementById('vp').value;
+  const ph=document.getElementById('ph').value.trim();
+  const msg=document.getElementById('msg').value.trim();
+
+  if(!fn||!em||!pc||!vs||!vp){showToast('Please fill in all required fields.');return}
+  if(!em.includes('@')||!em.includes('.')){showToast('Please enter a valid email.');return}
+
+  const subj=encodeURIComponent('JS Valeting Booking — '+fn+' '+ln);
+  const body=encodeURIComponent(
+    'Name: '+fn+' '+ln+'\nEmail: '+em+'\nPhone: '+(ph||'Not provided')+
+    '\nPostcode: '+pc+'\nVehicle size: '+vs+'\nPackage: '+vp+
+    '\n\nMessage:\n'+(msg||'None')+'\n\n---\nSent via JS Valeting website'
   );
+  window.location.href='mailto:js.mobilecarvaleting@gmail.com?subject='+subj+'&body='+body;
+  document.getElementById('formOk').classList.add('show');
+  showToast('Opening your email app...');
+}
 
-  // ---------- REVEAL ON SCROLL ----------
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add(\"in\"); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll(\".reveal\").forEach(el => io.observe(el));
-
-  // ---------- COPY EMAIL TOAST ----------
-  function copyEmail() {
-    const email = \"js.mobilecarvaleting@gmail.com\";
-    const showToast = (msg) => {
-      const t = document.getElementById(\"toast\");
-      t.textContent = msg;
-      t.classList.add(\"show\");
-      setTimeout(() => t.classList.remove(\"show\"), 2200);
-    };
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(email)
-        .then(() => showToast(\"Email copied — \" + email))
-        .catch(() => showToast(\"Couldn't copy. Please copy manually.\"));
-    } else {
-      showToast(\"Please copy manually: \" + email);
-    }
-  }
-  window.copyEmail = copyEmail;
-
-  // ---------- YEAR ----------
-  document.getElementById(\"year\").textContent = new Date().getFullYear();
+// --- YEAR ---
+document.getElementById('yr').textContent=new Date().getFullYear();
 </script>
-
 </body>
 </html>
